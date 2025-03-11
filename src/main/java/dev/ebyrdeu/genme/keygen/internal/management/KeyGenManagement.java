@@ -28,7 +28,7 @@ class KeyGenManagement implements KeyGenApi {
 	@Override
 	public String wep128() {
 		return this.randomizerApi.random(
-			"Wep128",
+			"WEP128",
 			13,
 			false,
 			false,
@@ -41,7 +41,7 @@ class KeyGenManagement implements KeyGenApi {
 	@Override
 	public String wep152() {
 		return this.randomizerApi.random(
-			"Wep128",
+			"WEP128",
 			16,
 			false,
 			false,
@@ -54,8 +54,8 @@ class KeyGenManagement implements KeyGenApi {
 	@Override
 	public String wep256() {
 		return this.randomizerApi.random(
-			"Wep128",
-			29,
+			"WEP128",
+			32,
 			false,
 			false,
 			false,
@@ -66,11 +66,27 @@ class KeyGenManagement implements KeyGenApi {
 
 	@Override
 	public String wpa160() {
-		return "";
+		return this.randomizerApi.random(
+			"WPA160",
+			20,
+			true,
+			true,
+			true,
+			true,
+			false
+		);
 	}
 
 	@Override
-	public String wpa512() {
-		return "";
+	public String wpa504() {
+		return this.randomizerApi.random(
+			"WPA504",
+			63,
+			true,
+			true,
+			true,
+			true,
+			false
+		);
 	}
 }

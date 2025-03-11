@@ -5,13 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+
+
 @Service
 class RandomizerManagement implements RandomizerApi {
+
 	private static final String LOWER_CASE = "abcdefghijklmnopqrstuvwxyz";
 	private static final String UPPER_CASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String NUMBERS = "1234567890";
-	private static final String SPECIAL_CHARACTERS = "`~!@#$%^&*()-=_+[]{}|;':\",./<>?\\";
+	private static final String SPECIAL_CHARACTERS = "`~!@#$%^&*()-=_+[]{}|;':\",./<>?";
 	private static final String HEX = "123456789ABCDEF";
+
 	private static final Logger log = LoggerFactory.getLogger(RandomizerManagement.class);
 
 	@Override
@@ -26,6 +31,7 @@ class RandomizerManagement implements RandomizerApi {
 	) {
 		StringBuilder pool = new StringBuilder();
 		StringBuilder key = new StringBuilder();
+		SecureRandom random = new SecureRandom();
 
 		if (lowerCase) {
 			pool.append(LOWER_CASE);
@@ -52,10 +58,10 @@ class RandomizerManagement implements RandomizerApi {
 			log.info("[RandomizerManagement/random] :: HEX added to pool for {}", implementation);
 		}
 
+		// NOTE: String.repeat() is possible but i do loops more readable
 		for (int i = 0; i < length; i++) {
-			int rounded = (int) Math.floor(Math.random() * (pool.capacity() - 1));
-			log.info("rounded value :::::::: {}", rounded);
-			key.append(pool.charAt(rounded));
+			int number = random.nextInt(pool.length() -1);
+			key.append(pool.charAt(number));
 		}
 
 		return key.toString();

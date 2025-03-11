@@ -11,5 +11,5 @@ public interface KeyGenApi {
 
 	String wpa160();
 
-	String wpa512();
+	String wpa504();
 }

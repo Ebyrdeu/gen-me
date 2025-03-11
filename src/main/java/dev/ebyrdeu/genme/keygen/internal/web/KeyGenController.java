@@ -1,16 +1,19 @@
 package dev.ebyrdeu.genme.keygen.internal.web;
 
 import dev.ebyrdeu.genme.keygen.KeyGenApi;
+import dev.ebyrdeu.genme.keygen.internal.dto.KeyGenResponseDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
+import java.util.List;
+import java.util.stream.IntStream;
+
 
 @RestController
 @RequestMapping("/api/v1/gen")
 class KeyGenController {
-
 	private final KeyGenApi keyGenApi;
 
 	public KeyGenController(KeyGenApi keyGenApi) {
@@ -18,32 +21,39 @@ class KeyGenController {
 	}
 
 	@GetMapping
-	public WepWpaData getAll() {
-		String wep64 = this.keyGenApi.wep64();
-		String wep128 = this.keyGenApi.wep128();
-		String wep152 = this.keyGenApi.wep152();
-		String wep256 = this.keyGenApi.wep256();
-		String wpa160 = this.keyGenApi.wpa160();
-		String wpa512 = this.keyGenApi.wpa512();
+	public KeyGenResponseDto getAll(@RequestParam(defaultValue = "6", required = false) int count) {
+		List<String> wep64 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wep64())
+			.toList();
 
-		return new WepWpaData(
+		List<String> wep128 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wep128())
+			.toList();
+
+		List<String> wep152 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wep152())
+			.toList();
+
+		List<String> wep256 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wep256())
+			.toList();
+
+		List<String> wpa160 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wpa160())
+			.toList();
+
+		List<String> wpa504 = IntStream.range(0, count)
+			.mapToObj(_ -> this.keyGenApi.wpa504())
+			.toList();
+
+		return new KeyGenResponseDto(
 			wep64,
 			wep128,
 			wep152,
 			wep256,
 			wpa160,
-			wpa512
+			wpa504
 		);
 	}
 
-	record WepWpaData(
-		String wep64,
-		String wep128,
-		String wep152,
-		String wep256,
-		String wpa160,
-		String wpa512
-	) implements Serializable {
-
-	}
 }
