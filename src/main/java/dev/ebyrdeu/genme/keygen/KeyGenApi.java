@@ -7,7 +7,7 @@ public interface KeyGenApi {
 
 	String wep152();
 
-	String wep512();
+	String wep256();
 
 	String wpa160();
 
