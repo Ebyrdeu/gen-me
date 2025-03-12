@@ -4,7 +4,7 @@ package dev.ebyrdeu.genme.randomizer;
 
 public interface RandomizerApi {
 
-	String random(
+	String custom(
 		String implementation,
 		int length,
 		boolean lowerCase,
@@ -13,4 +13,5 @@ public interface RandomizerApi {
 		boolean specialCharacters,
 		boolean hex
 	);
+
 }

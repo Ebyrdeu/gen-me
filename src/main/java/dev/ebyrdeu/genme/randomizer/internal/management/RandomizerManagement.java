@@ -4,7 +4,6 @@ import dev.ebyrdeu.genme.randomizer.RandomizerApi;
 import dev.ebyrdeu.genme.randomizer.internal.excpetion.RandomizerInternalServerErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -22,7 +21,7 @@ class RandomizerManagement implements RandomizerApi {
 	private static final Logger log = LoggerFactory.getLogger(RandomizerManagement.class);
 
 	@Override
-	public String random(
+	public String custom(
 		String implementation,
 		int length,
 		boolean lowerCase,
@@ -31,7 +30,7 @@ class RandomizerManagement implements RandomizerApi {
 		boolean specialCharacters,
 		boolean hex
 	) {
-		log.info("[RandomizerManagement/random]:: Execution started.");
+		log.trace("[RandomizerManagement/random]:: Execution started.");
 		try {
 
 			if (length > 64) {
@@ -78,13 +77,13 @@ class RandomizerManagement implements RandomizerApi {
 				int number = random.nextInt(pool.length() - 1);
 				key.append(pool.charAt(number));
 			}
-
 			return key.toString();
 		} catch (RuntimeException e) {
 			log.error("[RandomizerManagement/random]:: Exception occurred while generating keys. Exception: {}", e.getMessage());
 			throw new RandomizerInternalServerErrorException("Failed to generate keys due to an unexpected error :: " + e.getMessage());
 		} finally {
-			log.info("[RandomizerManagement/random]:: Execution ended.");
+			log.trace("[RandomizerManagement/random]:: Execution ended.");
 		}
 	}
+
 }
