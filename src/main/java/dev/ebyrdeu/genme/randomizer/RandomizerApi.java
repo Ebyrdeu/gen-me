@@ -1,5 +1,7 @@
 package dev.ebyrdeu.genme.randomizer;
 
+
+
 public interface RandomizerApi {
 
 	String random(

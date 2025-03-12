@@ -1,5 +1,7 @@
 @org.springframework.modulith.ApplicationModule(
 	displayName = "Randomizer",
-	allowedDependencies = {}
+	allowedDependencies = {
+		"common :: dto"
+	}
 )
 package dev.ebyrdeu.genme.randomizer;

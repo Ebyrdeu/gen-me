@@ -4,6 +4,7 @@ import dev.ebyrdeu.genme.keygen.KeyGenApi;
 import dev.ebyrdeu.genme.randomizer.RandomizerApi;
 import org.springframework.stereotype.Service;
 
+
 @Service
 class KeyGenManagement implements KeyGenApi {
 	private final RandomizerApi randomizerApi;

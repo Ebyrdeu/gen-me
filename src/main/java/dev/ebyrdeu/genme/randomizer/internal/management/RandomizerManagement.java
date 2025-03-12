@@ -1,8 +1,10 @@
 package dev.ebyrdeu.genme.randomizer.internal.management;
 
 import dev.ebyrdeu.genme.randomizer.RandomizerApi;
+import dev.ebyrdeu.genme.randomizer.internal.excpetion.RandomizerInternalServerErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -29,41 +31,60 @@ class RandomizerManagement implements RandomizerApi {
 		boolean specialCharacters,
 		boolean hex
 	) {
-		StringBuilder pool = new StringBuilder();
-		StringBuilder key = new StringBuilder();
-		SecureRandom random = new SecureRandom();
+		log.info("[RandomizerManagement/random]:: Execution started.");
+		try {
 
-		if (lowerCase) {
-			pool.append(LOWER_CASE);
-			log.info("[RandomizerManagement/random] :: LOWER_CASE added to pool for {}", implementation);
+			if (length > 64) {
+				throw new IllegalArgumentException("Max length is 64 chars");
+			}
+
+			if (!lowerCase && !upperCase && !numbers && !specialCharacters && !hex) {
+				throw new IllegalArgumentException("At least one boolean argument need to be true");
+			}
+
+			StringBuilder pool = new StringBuilder();
+			StringBuilder key = new StringBuilder();
+			SecureRandom random = new SecureRandom();
+
+			if (lowerCase) {
+				pool.append(LOWER_CASE);
+				log.debug("[RandomizerManagement/random] :: LOWER_CASE added to pool for {}", implementation);
+			}
+
+			if (upperCase) {
+				pool.append(UPPER_CASE);
+				log.debug("[RandomizerManagement/random] :: UPPER_CASE added to pool for {}", implementation);
+			}
+
+			if (numbers) {
+				pool.append(NUMBERS);
+				log.debug("[RandomizerManagement/random] :: NUMBERS added to pool for {}", implementation);
+			}
+
+			if (specialCharacters) {
+				pool.append(SPECIAL_CHARACTERS);
+				log.debug("[RandomizerManagement/random] :: SPECIAL_CHARACTERS added to pool for {}", implementation);
+			}
+
+			if (hex) {
+				pool.append(HEX);
+				log.debug("[RandomizerManagement/random] :: HEX added to pool for {}", implementation);
+			}
+
+			log.debug("[RandomizerManagement/random] :: current pool before key gen - {}", pool);
+
+			// NOTE: String.repeat() is possible but loops more readable
+			for (int i = 0; i < length; i++) {
+				int number = random.nextInt(pool.length() - 1);
+				key.append(pool.charAt(number));
+			}
+
+			return key.toString();
+		} catch (RuntimeException e) {
+			log.error("[RandomizerManagement/random]:: Exception occurred while generating keys. Exception: {}", e.getMessage());
+			throw new RandomizerInternalServerErrorException("Failed to generate keys due to an unexpected error :: " + e.getMessage());
+		} finally {
+			log.info("[RandomizerManagement/random]:: Execution ended.");
 		}
-
-		if (upperCase) {
-			pool.append(UPPER_CASE);
-			log.info("[RandomizerManagement/random] :: UPPER_CASE added to pool for {}", implementation);
-		}
-
-		if (numbers) {
-			pool.append(NUMBERS);
-			log.info("[RandomizerManagement/random] :: NUMBERS added to pool for {}", implementation);
-		}
-
-		if (specialCharacters) {
-			pool.append(SPECIAL_CHARACTERS);
-			log.info("[RandomizerManagement/random] :: SPECIAL_CHARACTERS added to pool for {}", implementation);
-		}
-
-		if (hex) {
-			pool.append(HEX);
-			log.info("[RandomizerManagement/random] :: HEX added to pool for {}", implementation);
-		}
-
-		// NOTE: String.repeat() is possible but i do loops more readable
-		for (int i = 0; i < length; i++) {
-			int number = random.nextInt(pool.length() -1);
-			key.append(pool.charAt(number));
-		}
-
-		return key.toString();
 	}
 }

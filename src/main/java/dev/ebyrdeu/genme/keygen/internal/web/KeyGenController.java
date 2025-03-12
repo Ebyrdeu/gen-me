@@ -1,7 +1,10 @@
 package dev.ebyrdeu.genme.keygen.internal.web;
 
+import dev.ebyrdeu.genme.common.dto.BaseResponseDto;
 import dev.ebyrdeu.genme.keygen.KeyGenApi;
 import dev.ebyrdeu.genme.keygen.internal.dto.KeyGenResponseDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +24,7 @@ class KeyGenController {
 	}
 
 	@GetMapping
-	public KeyGenResponseDto getAll(@RequestParam(defaultValue = "6", required = false) int count) {
+	public ResponseEntity<BaseResponseDto<KeyGenResponseDto>> getAll(@RequestParam(defaultValue = "6", required = false) int count) {
 		List<String> wep64 = IntStream.range(0, count)
 			.mapToObj(_ -> this.keyGenApi.wep64())
 			.toList();
@@ -46,14 +49,24 @@ class KeyGenController {
 			.mapToObj(_ -> this.keyGenApi.wpa504())
 			.toList();
 
-		return new KeyGenResponseDto(
-			wep64,
-			wep128,
-			wep152,
-			wep256,
-			wpa160,
-			wpa504
+		return ResponseEntity.ok().body(
+			new BaseResponseDto<>(
+				HttpStatus.OK,
+				200,
+				"Success",
+				new KeyGenResponseDto(
+					wep64,
+					wep128,
+					wep152,
+					wep256,
+					wpa160,
+					wpa504
+				)
+			)
 		);
+
+
+
 	}
 
 }
