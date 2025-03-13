@@ -1,6 +1,6 @@
 import * as React from "react";
 import { QueryProvider, ThemeProvider } from "@/common/contexts";
-import { Toaster } from "@/common/ui/sonner.tsx";
+import { Toaster } from "@/common/ui";
 
 
 interface ProvidersProps {
@@ -15,9 +15,9 @@ function Providers({children}: ProvidersProps): React.ReactElement {
 			<QueryProvider>
 				<ThemeProvider>
 					{children}
+					<Toaster duration={TOASTER_DURATION}/>
 				</ThemeProvider>
 			</QueryProvider>
-			<Toaster duration={TOASTER_DURATION}/>
 		</React.Fragment>
 	);
 }

@@ -16,7 +16,7 @@ export const queryClient: QueryClient = new QueryClient({
 	},
 	queryCache: new QueryCache({
 		onError: (cause) => {
-			const {response} = cause as AxiosError<BaseResponse<any>>;
+			const {response} = cause as AxiosError<BaseResponse<unknown>>;
 			toast.error(response?.data.status ?? DEFAULT_STATUS, {
 				description: response?.data.message ?? DEFAULT_MESSAGE,
 				action: {
@@ -30,7 +30,7 @@ export const queryClient: QueryClient = new QueryClient({
 	}),
 	mutationCache: new MutationCache({
 		onError: (cause) => {
-			const {response} = cause as AxiosError<BaseResponse<any>>;
+			const {response} = cause as AxiosError<BaseResponse<unknown>>;
 			toast.error(response?.data.message ?? DEFAULT_MESSAGE, {
 				description: response?.data.message ?? DEFAULT_MESSAGE,
 				action: {
