@@ -14,21 +14,6 @@ import java.io.IOException;
 class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry
-                .addViewController("/{s1:[^\\.]*}")
-                .setViewName("forward:/index.html");
-
-        registry
-                .addViewController("/{s1:[^\\.]*}/{s2:[^\\.]*}")
-                .setViewName("forward:/index.html");
-
-        registry
-                .addViewController("/{s1:[^\\.]*}/{s2:[^\\.]*}/{s3:[^\\\\.]*}")
-                .setViewName("forward:/index.html");
-    }
-
-    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
@@ -36,10 +21,17 @@ class WebConfig implements WebMvcConfigurer {
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        Resource requestedResource = location.createRelative(resourcePath);
-                        return (requestedResource.exists() && requestedResource.isReadable())
-                                ? requestedResource
-                                : new ClassPathResource("/static/index.html");
+                        Resource resource = location.createRelative(resourcePath);
+                        if (resource.exists() && resource.isReadable()) {
+                            return resource;
+                        }
+
+                        if (!resourcePath.startsWith("assets/")
+                                && !resourcePath.startsWith("static/")) {
+                            return new ClassPathResource("/static/index.html");
+                        }
+
+                        return null;
                     }
                 });
     }
