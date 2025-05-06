@@ -1,4 +1,4 @@
-package dev.ebyrdeu.genme.keygen.internal.security.internal;
+package dev.ebyrdeu.genme.security.internal;
 
 
 import jakarta.servlet.http.HttpServletRequest;

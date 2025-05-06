@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:latest
 
 # Install required libraries
 RUN apk add --no-cache libstdc++ gcompat

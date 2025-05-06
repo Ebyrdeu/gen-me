@@ -3,4 +3,4 @@
 	allowedDependencies = {}
 )
 @org.springframework.lang.NonNullApi
-package dev.ebyrdeu.genme.keygen.internal.security;
+package dev.ebyrdeu.genme.security;
